@@ -1,232 +1,131 @@
 /* ── REACH Lab — Admin JS ────────────────────────────────────────────────────
-   Firebase Auth state, project CRUD, and admin UI.                            */
-
-const DEFAULT_PROJECTS = [
-  {
-    id: 'p1',
-    title: 'Dexterous Manipulation with Deformable Objects',
-    tag: 'Robot Learning · Manipulation',
-    desc: 'Advancing robotic grasping, in-hand manipulation, and adaptable object handling in complex real-world scenarios, including those involving deformable objects and uncertain conditions. We develop reinforcement learning and imitation learning pipelines that allow robots to acquire manipulation skills from limited demonstrations.',
-    contact: { name: 'Prof. Fares Abu-Dakka', url: 'https://nyuad.nyu.edu' },
-    video: { type: 'youtube', url: 'https://www.youtube.com/embed/videoseries?list=PLRezMy-3ORkgm6b3E4LL5m07hd-eELrui' },
-    pubs: [{ text: 'Abu-Dakka et al. Robot skill learning via compliance-driven RL. IEEE RA-L 2024.', url: '' }]
-  },
-  {
-    id: 'p2',
-    title: 'Autonomous Robot Learning from Human Observation',
-    tag: 'Imitation Learning · HRI',
-    desc: 'Drawing inspiration from how humans and animals learn, we develop algorithms that enable robots to acquire new skills through reinforcement learning, trial and error, and observing and mimicking the actions of others. A key challenge is bridging the gap between human demonstrations and robot execution in varied environments.',
-    contact: { name: 'REACH Lab', url: '' },
-    video: { type: 'none', url: '' },
-    pubs: []
-  },
-  {
-    id: 'p3',
-    title: 'Safe Human-Robot Collaboration',
-    tag: 'Safety · Control',
-    desc: 'Designing control architectures that keep robots safe and predictable during close collaboration with humans. We integrate constraint-aware motion planning with learned task policies, ensuring that robotic assistants can handle dangerous or repetitive tasks while remaining under human oversight at all times.',
-    contact: { name: 'REACH Lab', url: '' },
-    video: { type: 'none', url: '' },
-    pubs: []
-  }
-];
-
-// ── Helpers ──────────────────────────────────────────────────────────────────
-const isHttpUrl = u => typeof u === 'string' && /^https?:\/\//i.test(u);
-
-function mk(tag, className) {
-  const el = document.createElement(tag);
-  if (className) el.className = className;
-  return el;
-}
-
-function videoEmbedUrl(type, url) {
-  if (!url || type === 'none') return null;
-  if (type === 'youtube') {
-    const m = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([A-Za-z0-9_-]{11})/);
-    if (m) return 'https://www.youtube.com/embed/' + m[1];
-    if (url.includes('youtube.com/embed')) return url;
-  }
-  if (type === 'vimeo') {
-    const m = url.match(/vimeo\.com\/(\d+)/);
-    if (m) return 'https://player.vimeo.com/video/' + m[1];
-    if (url.includes('player.vimeo.com')) return url;
-  }
-  if (type === 'direct' && isHttpUrl(url)) return url;
-  return null;
-}
-
-// ── Render ────────────────────────────────────────────────────────────────────
-function buildMediaCol(p) {
-  const media = mk('div', 'project-media');
-  const embedUrl = videoEmbedUrl(p.video && p.video.type, p.video && p.video.url);
-  if (embedUrl) {
-    const iframe = mk('iframe');
-    iframe.src = embedUrl;
-    iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
-    iframe.allowFullscreen = true;
-    media.appendChild(iframe);
-  } else {
-    const placeholder = mk('div', 'no-video');
-    placeholder.textContent = 'Video coming soon';
-    media.appendChild(placeholder);
-  }
-  return media;
-}
-
-function buildContentCol(p) {
-  const content = mk('div', 'project-content');
-
-  if (p.tag) {
-    const tag = mk('span', 'project-tag');
-    tag.textContent = p.tag;
-    content.appendChild(tag);
-  }
-
-  const title = mk('h3', 'project-title');
-  title.textContent = p.title;
-  content.appendChild(title);
-
-  const desc = mk('p', 'project-desc');
-  desc.textContent = p.desc;
-  content.appendChild(desc);
-
-  if (p.contact && p.contact.name) {
-    const contact = mk('p', 'project-contact');
-    contact.append('Contact: ');
-    if (isHttpUrl(p.contact.url)) {
-      const link = mk('a');
-      link.href = p.contact.url;
-      link.target = '_blank';
-      link.rel = 'noopener noreferrer';
-      link.textContent = p.contact.name;
-      contact.appendChild(link);
-    } else {
-      contact.append(p.contact.name);
-    }
-    content.appendChild(contact);
-  }
-
-  if (p.pubs && p.pubs.length) {
-    const pubsDiv = mk('div', 'project-pubs');
-    const pubsTitle = mk('p', 'project-pubs-title');
-    pubsTitle.textContent = 'Relevant Publications';
-    pubsDiv.appendChild(pubsTitle);
-    p.pubs.forEach(function(pub) {
-      const item = mk('div', 'pub-item');
-      item.textContent = pub.text;
-      if (isHttpUrl(pub.url)) {
-        const link = mk('a', 'pub-link');
-        link.href = pub.url;
-        link.target = '_blank';
-        link.rel = 'noopener noreferrer';
-        link.textContent = '[link]';
-        item.appendChild(link);
-      }
-      pubsDiv.appendChild(item);
-    });
-    content.appendChild(pubsDiv);
-  }
-
-  return content;
-}
-
-// Admin version — adds a delete button via event listener (no inline handler attribute)
-function renderProject(p) {
-  const card = mk('div', 'project-card');
-  card.id = 'project-' + String(p.id).replace(/[^a-zA-Z0-9_-]/g, '');
-
-  const deleteBtn = mk('button', 'btn-delete-project');
-  deleteBtn.textContent = '✕ Remove';
-  deleteBtn.addEventListener('click', function() { deleteProject(p.id); });
-  card.appendChild(deleteBtn);
-
-  const inner = mk('div', 'project-card-inner');
-  inner.appendChild(buildContentCol(p));
-  inner.appendChild(buildMediaCol(p));
-  card.appendChild(inner);
-  return card;
-}
+   4-tab admin panel: News, Research, Team, Publications.                       */
 
 // ── State ────────────────────────────────────────────────────────────────────
-var currentProjects = [];
+var currentTab = 'news';
+var unsubNews = null, unsubResearch = null, unsubTeam = null, unsubPublications = null;
+var currentNews = [], currentProjects = [], currentTeam = [], currentPublications = [];
+var pubCount = 0;
 
-async function seedDefaultProjects() {
-  const batch = db.batch();
-  DEFAULT_PROJECTS.forEach(function(p, i) {
-    const ref = db.collection('projects').doc(p.id);
-    const payload = Object.assign({}, p, {
-      order: i,
+var MODAL_TITLES = {
+  news: 'Add News Item',
+  research: 'Add Research Project',
+  team: 'Add Team Member',
+  publications: 'Add Publication'
+};
+
+// ── Tab switching ─────────────────────────────────────────────────────────────
+function switchTab(tab) {
+  currentTab = tab;
+  ['news', 'research', 'team', 'publications'].forEach(function(t) {
+    document.getElementById('tab-' + t).classList.toggle('tab-panel-active', t === tab);
+    document.getElementById('tab-btn-' + t).classList.toggle('tab-active', t === tab);
+  });
+}
+
+// ── Render helpers ────────────────────────────────────────────────────────────
+function renderAdminList(containerId, items, subtitleFn, deleteFn) {
+  const container = document.getElementById(containerId);
+  container.textContent = '';
+  if (!items.length) {
+    const empty = mk('p');
+    empty.textContent = 'No items yet.';
+    empty.style.cssText = 'color:var(--gray-500);padding:1rem 0;font-size:14px;';
+    container.appendChild(empty);
+    return;
+  }
+  items.forEach(function(item) {
+    const row = mk('div', 'admin-item-row');
+
+    const info = mk('div', 'admin-item-info');
+    const titleEl = mk('div', 'admin-item-title');
+    titleEl.textContent = item.title || item.name || '(untitled)';
+    info.appendChild(titleEl);
+
+    const sub = subtitleFn(item);
+    if (sub) {
+      const subEl = mk('div', 'admin-item-subtitle');
+      subEl.textContent = sub;
+      info.appendChild(subEl);
+    }
+
+    const deleteBtn = mk('button', 'btn-admin-delete');
+    deleteBtn.textContent = '✕ Remove';
+    deleteBtn.addEventListener('click', function() { deleteFn(item.id); });
+
+    row.appendChild(info);
+    row.appendChild(deleteBtn);
+    container.appendChild(row);
+  });
+}
+
+// ── News ──────────────────────────────────────────────────────────────────────
+function subscribeNews() {
+  return db.collection('news').orderBy('order', 'asc').onSnapshot(function(snapshot) {
+    currentNews = snapshot.docs.map(function(d) { return Object.assign({ id: d.id }, d.data()); });
+    renderAdminList('news-list', currentNews,
+      function(item) { return item.desc ? item.desc.slice(0, 80) + (item.desc.length > 80 ? '…' : '') : ''; },
+      deleteNews
+    );
+  }, function(err) { console.error('news read error:', err); });
+}
+
+async function deleteNews(id) {
+  if (!confirm('Remove this news item?')) return;
+  try {
+    await db.collection('news').doc(id).delete();
+  } catch (err) {
+    console.error('Delete failed:', err);
+    alert('Failed to delete — check your connection.');
+  }
+}
+
+async function submitNews() {
+  const title = document.getElementById('fn-title').value.trim();
+  const desc  = document.getElementById('fn-desc').value.trim();
+  if (!title || !desc) { alert('Please fill in the title and description.'); return; }
+
+  const btn = document.getElementById('fn-submit');
+  btn.textContent = 'Saving…';
+  btn.disabled = true;
+
+  try {
+    await db.collection('news').add({
+      title:     title,
+      desc:      desc,
+      link:      document.getElementById('fn-link').value.trim(),
+      order:     currentNews.length,
       createdAt: firebase.firestore.FieldValue.serverTimestamp()
     });
-    delete payload.id;
-    batch.set(ref, payload);
-  });
-  await batch.commit();
+    closeModal();
+  } catch (err) {
+    console.error('Add news failed:', err);
+    alert('Failed to save — check your connection.');
+  } finally {
+    btn.textContent = 'Add News →';
+    btn.disabled = false;
+  }
 }
 
-function subscribeToProjects() {
-  const container = document.getElementById('projects-container');
-  container.textContent = '';
-  const loading = mk('p');
-  loading.textContent = 'Loading projects…';
-  loading.style.cssText = 'color:var(--gray-500);text-align:center;padding:2rem 0;';
-  container.appendChild(loading);
-
-  return db.collection('projects')
-    .orderBy('order', 'asc')
-    .onSnapshot(function(snapshot) {
-      if (snapshot.empty) {
-        seedDefaultProjects().catch(function(err) {
-          console.error('Seed failed:', err);
-        });
-        return;
-      }
-      currentProjects = snapshot.docs.map(function(d) {
-        return Object.assign({ id: d.id }, d.data());
-      });
-      container.textContent = '';
-      currentProjects.forEach(function(p) { container.appendChild(renderProject(p)); });
-      document.getElementById('meta-projects').textContent = currentProjects.length;
-    }, function(err) {
-      console.error('Firestore read error:', err);
-      container.textContent = 'Could not load projects.';
-    });
+// ── Research ──────────────────────────────────────────────────────────────────
+function subscribeResearch() {
+  return db.collection('projects').orderBy('order', 'asc').onSnapshot(function(snapshot) {
+    currentProjects = snapshot.docs.map(function(d) { return Object.assign({ id: d.id }, d.data()); });
+    renderAdminList('research-list', currentProjects,
+      function(item) { return item.tag || ''; },
+      deleteProject
+    );
+  }, function(err) { console.error('projects read error:', err); });
 }
 
-// ── Delete ───────────────────────────────────────────────────────────────────
 async function deleteProject(id) {
-  if (!confirm('Remove this project from the database?')) return;
+  if (!confirm('Remove this project?')) return;
   try {
     await db.collection('projects').doc(id).delete();
   } catch (err) {
     console.error('Delete failed:', err);
-    alert('Failed to delete project. Check your connection and try again.');
+    alert('Failed to delete — check your connection.');
   }
-}
-
-// ── Add Project Modal ─────────────────────────────────────────────────────────
-var pubCount = 0;
-
-function openModal() {
-  document.getElementById('modal-backdrop').classList.add('open');
-  document.getElementById('f-title').value = '';
-  document.getElementById('f-tag').value = '';
-  document.getElementById('f-desc').value = '';
-  document.getElementById('f-contact-name').value = '';
-  document.getElementById('f-contact-url').value = '';
-  document.getElementById('f-video-type').value = 'youtube';
-  document.getElementById('f-video-url').value = '';
-  document.getElementById('pubs-list').textContent = '';
-  pubCount = 0;
-}
-
-function closeModal() {
-  document.getElementById('modal-backdrop').classList.remove('open');
-}
-
-function handleBackdropClick(e) {
-  if (e.target === document.getElementById('modal-backdrop')) closeModal();
 }
 
 function addPubRow(existingText, existingUrl) {
@@ -235,7 +134,6 @@ function addPubRow(existingText, existingUrl) {
   row.id = 'pub-' + pubCount;
 
   const inputsDiv = mk('div');
-
   const textInput = mk('input');
   textInput.type = 'text';
   textInput.placeholder = 'Author(s). Title. Venue Year.';
@@ -276,46 +174,187 @@ async function submitProject() {
   const desc  = document.getElementById('f-desc').value.trim();
   if (!title || !desc) { alert('Please fill in the project title and description.'); return; }
 
-  const btn = document.querySelector('.btn-submit');
+  const btn = document.getElementById('fr-submit');
   btn.textContent = 'Saving…';
   btn.disabled = true;
 
-  const p = {
-    id:      'p' + Date.now(),
-    title:   title,
-    tag:     document.getElementById('f-tag').value.trim(),
-    desc:    desc,
-    contact: {
-      name: document.getElementById('f-contact-name').value.trim(),
-      url:  document.getElementById('f-contact-url').value.trim()
-    },
-    video: {
-      type: document.getElementById('f-video-type').value,
-      url:  document.getElementById('f-video-url').value.trim()
-    },
-    pubs: getPubs()
-  };
-
   try {
-    const docId = p.id;
-    const payload = Object.assign({}, p, {
+    await db.collection('projects').add({
+      title:   title,
+      tag:     document.getElementById('f-tag').value.trim(),
+      desc:    desc,
+      contact: {
+        name: document.getElementById('f-contact-name').value.trim(),
+        url:  document.getElementById('f-contact-url').value.trim()
+      },
+      video: {
+        type: document.getElementById('f-video-type').value,
+        url:  document.getElementById('f-video-url').value.trim()
+      },
+      pubs:      getPubs(),
       order:     currentProjects.length,
       createdAt: firebase.firestore.FieldValue.serverTimestamp()
     });
-    delete payload.id;
-    await db.collection('projects').doc(docId).set(payload);
     closeModal();
-    setTimeout(function() {
-      const el = document.getElementById('project-' + p.id);
-      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }, 300);
   } catch (err) {
     console.error('Add project failed:', err);
-    alert('Failed to save project. Check your connection and try again.');
+    alert('Failed to save — check your connection.');
   } finally {
     btn.textContent = 'Add Project →';
     btn.disabled = false;
   }
+}
+
+// ── Team ──────────────────────────────────────────────────────────────────────
+function subscribeTeam() {
+  return db.collection('team').orderBy('order', 'asc').onSnapshot(function(snapshot) {
+    currentTeam = snapshot.docs.map(function(d) { return Object.assign({ id: d.id }, d.data()); });
+    renderAdminList('team-list', currentTeam,
+      function(item) { return item.role || ''; },
+      deleteTeamMember
+    );
+  }, function(err) { console.error('team read error:', err); });
+}
+
+async function deleteTeamMember(id) {
+  if (!confirm('Remove this team member?')) return;
+  try {
+    await db.collection('team').doc(id).delete();
+  } catch (err) {
+    console.error('Delete failed:', err);
+    alert('Failed to delete — check your connection.');
+  }
+}
+
+async function submitTeamMember() {
+  const name = document.getElementById('ft-name').value.trim();
+  const role = document.getElementById('ft-role').value.trim();
+  if (!name || !role) { alert('Please fill in the name and role.'); return; }
+
+  const btn = document.getElementById('ft-submit');
+  btn.textContent = 'Saving…';
+  btn.disabled = true;
+
+  try {
+    await db.collection('team').add({
+      name:      name,
+      role:      role,
+      photo:     document.getElementById('ft-photo').value.trim(),
+      bio:       document.getElementById('ft-bio').value.trim(),
+      order:     currentTeam.length,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+    closeModal();
+  } catch (err) {
+    console.error('Add team member failed:', err);
+    alert('Failed to save — check your connection.');
+  } finally {
+    btn.textContent = 'Add Member →';
+    btn.disabled = false;
+  }
+}
+
+// ── Publications ──────────────────────────────────────────────────────────────
+function subscribePublications() {
+  return db.collection('publications').orderBy('order', 'asc').onSnapshot(function(snapshot) {
+    currentPublications = snapshot.docs.map(function(d) { return Object.assign({ id: d.id }, d.data()); });
+    renderAdminList('publications-list', currentPublications,
+      function(item) {
+        const parts = [item.authors];
+        if (item.year) parts.push(String(item.year));
+        return parts.join(' · ');
+      },
+      deletePublication
+    );
+  }, function(err) { console.error('publications read error:', err); });
+}
+
+async function deletePublication(id) {
+  if (!confirm('Remove this publication?')) return;
+  try {
+    await db.collection('publications').doc(id).delete();
+  } catch (err) {
+    console.error('Delete failed:', err);
+    alert('Failed to delete — check your connection.');
+  }
+}
+
+async function submitPublication() {
+  const title   = document.getElementById('fp-title').value.trim();
+  const authors = document.getElementById('fp-authors').value.trim();
+  if (!title || !authors) { alert('Please fill in the title and authors.'); return; }
+
+  const btn = document.getElementById('fp-submit');
+  btn.textContent = 'Saving…';
+  btn.disabled = true;
+
+  const yearVal = document.getElementById('fp-year').value.trim();
+
+  try {
+    await db.collection('publications').add({
+      title:     title,
+      authors:   authors,
+      venue:     document.getElementById('fp-venue').value.trim(),
+      year:      yearVal ? parseInt(yearVal, 10) : null,
+      link:      document.getElementById('fp-link').value.trim(),
+      order:     currentPublications.length,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+    closeModal();
+  } catch (err) {
+    console.error('Add publication failed:', err);
+    alert('Failed to save — check your connection.');
+  } finally {
+    btn.textContent = 'Add Publication →';
+    btn.disabled = false;
+  }
+}
+
+// ── Modal ─────────────────────────────────────────────────────────────────────
+function openModal() {
+  document.getElementById('modal-title').textContent = MODAL_TITLES[currentTab];
+  ['news', 'research', 'team', 'publications'].forEach(function(t) {
+    document.getElementById('modal-form-' + t).style.display = t === currentTab ? 'block' : 'none';
+  });
+  clearModalForm(currentTab);
+  document.getElementById('modal-backdrop').classList.add('open');
+}
+
+function clearModalForm(tab) {
+  if (tab === 'news') {
+    document.getElementById('fn-title').value = '';
+    document.getElementById('fn-desc').value = '';
+    document.getElementById('fn-link').value = '';
+  } else if (tab === 'research') {
+    document.getElementById('f-title').value = '';
+    document.getElementById('f-tag').value = '';
+    document.getElementById('f-desc').value = '';
+    document.getElementById('f-contact-name').value = '';
+    document.getElementById('f-contact-url').value = '';
+    document.getElementById('f-video-type').value = 'youtube';
+    document.getElementById('f-video-url').value = '';
+    document.getElementById('pubs-list').textContent = '';
+    pubCount = 0;
+  } else if (tab === 'team') {
+    document.getElementById('ft-name').value = '';
+    document.getElementById('ft-role').value = '';
+    document.getElementById('ft-photo').value = '';
+    document.getElementById('ft-bio').value = '';
+  } else if (tab === 'publications') {
+    document.getElementById('fp-title').value = '';
+    document.getElementById('fp-authors').value = '';
+    document.getElementById('fp-venue').value = '';
+    document.getElementById('fp-year').value = '';
+    document.getElementById('fp-link').value = '';
+  }
+}
+
+function closeModal() {
+  document.getElementById('modal-backdrop').classList.remove('open');
+}
+
+function handleBackdropClick(e) {
+  if (e.target === document.getElementById('modal-backdrop')) closeModal();
 }
 
 // ── Auth UI ───────────────────────────────────────────────────────────────────
@@ -353,22 +392,23 @@ async function handleLogin() {
 }
 
 async function handleLogout() {
-  await auth.signOut();
+  await auth.signOut().catch(console.error);
 }
 
 // ── Init ──────────────────────────────────────────────────────────────────────
-var unsubscribeProjects = null;
-
 auth.onAuthStateChanged(function(user) {
   if (user) {
     showAdminControls(user);
-    unsubscribeProjects = subscribeToProjects();
+    unsubNews         = subscribeNews();
+    unsubResearch     = subscribeResearch();
+    unsubTeam         = subscribeTeam();
+    unsubPublications = subscribePublications();
   } else {
     showLoginCard();
-    if (unsubscribeProjects) {
-      unsubscribeProjects();
-      unsubscribeProjects = null;
-    }
+    [unsubNews, unsubResearch, unsubTeam, unsubPublications].forEach(function(unsub) {
+      if (unsub) unsub();
+    });
+    unsubNews = unsubResearch = unsubTeam = unsubPublications = null;
   }
 });
 

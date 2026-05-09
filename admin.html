@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>REACH Lab — Admin | NYU Abu Dhabi</title>
+<title>REACH Lab — Admin</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet">
 <style>
@@ -13,73 +13,39 @@
     --white: #ffffff; --off-white: #f5f8fb;
     --gray-100: #eaeff5; --gray-300: #b0bece; --gray-500: #6b7f95; --gray-700: #334560;
     --text: #0f1e32; --text-muted: #4a6080;
-    --border: rgba(42,95,160,0.15); --card-bg: #ffffff; --section-bg: #f5f8fb;
+    --border: rgba(42,95,160,0.15); --card-bg: #ffffff;
   }
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; }
-  body { font-family: 'IBM Plex Sans', sans-serif; background: var(--off-white); color: var(--text); line-height: 1.7; font-size: 16px; }
+  body { font-family: 'IBM Plex Sans', sans-serif; background: var(--off-white); color: var(--text); font-size: 16px; min-height: 100vh; }
 
-  nav {
-    position: sticky; top: 0; z-index: 100; background: var(--navy);
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 0 3rem; height: 64px; box-shadow: 0 2px 20px rgba(13,43,82,0.3);
-  }
-  .nav-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
-  .nav-logo-mark { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 22px; color: var(--sky-light); letter-spacing: -0.5px; }
-  .nav-logo-sub { font-size: 11px; font-weight: 300; color: var(--gray-300); letter-spacing: 0.08em; text-transform: uppercase; border-left: 1px solid rgba(255,255,255,0.2); padding-left: 12px; line-height: 1.3; }
-  .nav-links { display: flex; gap: 2rem; list-style: none; }
-  .nav-links a { color: var(--gray-300); text-decoration: none; font-size: 13.5px; font-weight: 400; letter-spacing: 0.03em; transition: color 0.2s; }
-  .nav-links a:hover { color: var(--white); }
-  .btn-admin { background: rgba(59,163,224,0.15); border: 1px solid rgba(59,163,224,0.4); color: var(--sky-light); font-size: 13px; padding: 6px 16px; border-radius: 4px; cursor: pointer; font-family: 'IBM Plex Sans', sans-serif; transition: background 0.2s, border-color 0.2s; }
-  .btn-admin:hover { background: rgba(59,163,224,0.25); border-color: var(--sky-light); }
+  nav { background: var(--navy); display: flex; align-items: center; justify-content: space-between; padding: 0 3rem; height: 64px; box-shadow: 0 2px 20px rgba(13,43,82,0.3); }
+  .nav-logo-mark { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 20px; color: var(--sky-light); letter-spacing: -0.5px; }
+  .nav-logo-mark span { font-weight: 400; font-size: 13px; color: var(--gray-300); margin-left: 8px; }
+  #admin-nav-controls { display: none; align-items: center; gap: 12px; }
+  #admin-user-email { font-size: 12px; color: var(--gray-300); }
+  .btn-logout { background: none; border: 1px solid rgba(255,255,255,0.2); color: var(--gray-300); font-size: 12px; padding: 5px 12px; border-radius: 4px; cursor: pointer; font-family: inherit; }
+  .btn-logout:hover { border-color: rgba(255,255,255,0.4); color: var(--white); }
 
-  .hero { background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 60%, #1e4d80 100%); color: white; padding: 90px 3rem 80px; position: relative; overflow: hidden; }
-  .hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 75% 50%, rgba(43,135,200,0.15) 0%, transparent 65%); pointer-events: none; }
-  .hero-inner { max-width: 900px; margin: 0 auto; position: relative; }
-  .hero-tag { font-size: 11px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--sky-light); margin-bottom: 1.2rem; }
-  h1.hero-title { font-family: 'Syne', sans-serif; font-size: clamp(2.4rem, 5vw, 3.6rem); font-weight: 800; line-height: 1.1; letter-spacing: -1px; color: var(--white); margin-bottom: 1.2rem; }
-  h1.hero-title span { color: var(--sky-light); }
-  .hero-desc { font-size: 17px; font-weight: 300; color: rgba(255,255,255,0.75); max-width: 640px; line-height: 1.75; margin-bottom: 2rem; }
-  .hero-meta { display: flex; gap: 2.5rem; flex-wrap: wrap; }
-  .hero-meta-item { display: flex; flex-direction: column; gap: 2px; }
-  .hero-meta-item strong { font-family: 'Syne', sans-serif; font-size: 1.4rem; font-weight: 700; color: var(--sky-light); }
-  .hero-meta-item span { font-size: 12px; color: rgba(255,255,255,0.5); letter-spacing: 0.05em; }
+  .admin-main { max-width: 960px; margin: 0 auto; padding: 2rem 3rem; }
 
-  .section { padding: 80px 3rem; }
-  .section-inner { max-width: 960px; margin: 0 auto; }
-  .section-title { font-family: 'Syne', sans-serif; font-size: 1.6rem; font-weight: 700; color: var(--navy); letter-spacing: -0.3px; margin-bottom: 2.5rem; display: flex; align-items: center; gap: 12px; }
-  .section-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
-  .alt-bg { background: var(--section-bg); }
+  .admin-tab-bar { display: flex; border-bottom: 2px solid var(--border); margin-bottom: 2rem; }
+  .tab-btn { padding: 10px 24px; background: none; border: none; border-bottom: 2px solid transparent; margin-bottom: -2px; font-size: 14px; font-family: 'IBM Plex Sans', sans-serif; color: var(--gray-500); cursor: pointer; transition: color 0.2s, border-color 0.2s; }
+  .tab-btn:hover { color: var(--navy); }
+  .tab-btn.tab-active { color: var(--sky); border-bottom-color: var(--sky); font-weight: 500; }
 
-  #projects-container { display: flex; flex-direction: column; gap: 3rem; }
-  .project-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; transition: box-shadow 0.25s; position: relative; }
-  .project-card:hover { box-shadow: 0 6px 32px rgba(13,43,82,0.1); }
-  .project-card-inner { display: grid; grid-template-columns: 1fr 380px; gap: 0; }
-  .project-content { padding: 2rem 2.2rem; }
-  .project-tag { display: inline-block; font-size: 10.5px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--sky); background: var(--sky-pale); border-radius: 3px; padding: 3px 10px; margin-bottom: 1rem; }
-  .project-title { font-family: 'Syne', sans-serif; font-size: 1.25rem; font-weight: 700; color: var(--navy); line-height: 1.3; margin-bottom: 0.8rem; }
-  .project-desc { font-size: 14.5px; color: var(--text-muted); line-height: 1.75; margin-bottom: 1.2rem; }
-  .project-contact { font-size: 13px; color: var(--gray-500); margin-bottom: 1rem; }
-  .project-contact a { color: var(--sky); text-decoration: none; }
-  .project-contact a:hover { text-decoration: underline; }
-  .project-pubs { margin-top: 1rem; border-top: 1px solid var(--border); padding-top: 1rem; }
-  .project-pubs-title { font-size: 11px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gray-500); margin-bottom: 0.6rem; }
-  .pub-item { font-size: 13px; line-height: 1.6; color: var(--text-muted); margin-bottom: 0.5rem; }
-  .pub-link { font-size: 12px; color: var(--sky); text-decoration: none; margin-left: 6px; }
-  .pub-link:hover { text-decoration: underline; }
-  .project-media { background: var(--navy); display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 260px; position: relative; }
-  .project-media iframe { width: 100%; height: 100%; min-height: 260px; border: none; display: block; }
-  .project-media .no-video { color: rgba(255,255,255,0.3); font-size: 13px; text-align: center; padding: 2rem; }
+  .tab-panel { display: none; }
+  .tab-panel.tab-panel-active { display: block; }
+  .tab-panel-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.2rem; }
+  .tab-panel-title { font-family: 'Syne', sans-serif; font-size: 1.3rem; font-weight: 700; color: var(--navy); }
+  .btn-admin { background: var(--navy); color: white; border: none; padding: 8px 18px; border-radius: 4px; font-size: 13px; cursor: pointer; font-family: 'IBM Plex Sans', sans-serif; transition: background 0.2s; }
+  .btn-admin:hover { background: var(--navy-mid); }
 
-  .btn-delete-project { position: absolute; top: 12px; right: 12px; background: rgba(255,255,255,0.9); border: 1px solid #eee; border-radius: 4px; padding: 4px 10px; font-size: 11px; color: #cc4444; cursor: pointer; opacity: 0; transition: opacity 0.2s; font-family: inherit; }
-  .project-card:hover .btn-delete-project { opacity: 1; }
-
-  @media (max-width: 700px) {
-    .project-card-inner { grid-template-columns: 1fr; }
-    .project-media { min-height: 200px; }
-    nav { padding: 0 1.2rem; }
-    .hero, .section { padding-left: 1.2rem; padding-right: 1.2rem; }
-  }
+  .admin-item-row { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border: 1px solid var(--border); border-radius: 8px; margin-bottom: 8px; background: var(--card-bg); }
+  .admin-item-info { flex: 1; min-width: 0; margin-right: 12px; }
+  .admin-item-title { font-size: 14px; font-weight: 600; color: var(--navy); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .admin-item-subtitle { font-size: 12px; color: var(--gray-500); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .btn-admin-delete { background: none; border: 1px solid #eee; border-radius: 4px; padding: 5px 12px; font-size: 12px; color: #cc4444; cursor: pointer; white-space: nowrap; font-family: inherit; flex-shrink: 0; transition: background 0.2s; }
+  .btn-admin-delete:hover { background: #fff0f0; border-color: #cc4444; }
 
   .modal-backdrop { display: none; position: fixed; inset: 0; z-index: 200; background: rgba(10,25,50,0.7); align-items: center; justify-content: center; padding: 1.5rem; }
   .modal-backdrop.open { display: flex; }
@@ -105,30 +71,26 @@
   .btn-submit { background: var(--navy); border: none; border-radius: 6px; padding: 9px 26px; cursor: pointer; font-size: 14px; color: white; font-family: 'Syne', sans-serif; font-weight: 600; transition: background 0.2s; }
   .btn-submit:hover { background: var(--navy-mid); }
 
-  .team-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1.4rem; }
-  .team-card { background: var(--white); border: 1px solid var(--border); border-radius: 8px; padding: 1.4rem 1.2rem; text-align: center; }
-  .team-avatar { width: 60px; height: 60px; border-radius: 50%; background: var(--navy-mid); display: flex; align-items: center; justify-content: center; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 18px; color: var(--sky-light); margin: 0 auto 12px; }
-  .team-name { font-family: 'Syne', sans-serif; font-weight: 600; font-size: 14.5px; color: var(--navy); }
-  .team-role { font-size: 12.5px; color: var(--text-muted); margin-top: 3px; }
-
-  footer { background: var(--navy); color: rgba(255,255,255,0.55); text-align: center; padding: 2rem 3rem; font-size: 13px; }
-  footer a { color: var(--sky-light); text-decoration: none; }
-  footer a:hover { text-decoration: underline; }
+  @media (max-width: 700px) {
+    nav { padding: 0 1.2rem; }
+    .admin-main { padding: 1.5rem 1.2rem; }
+    .tab-btn { padding: 10px 14px; font-size: 13px; }
+  }
 </style>
 </head>
 <body>
 
-<!-- Login overlay: visible until auth.onAuthStateChanged fires with a user -->
+<!-- Login overlay -->
 <div id="login-card" style="position:fixed;inset:0;z-index:300;background:rgba(10,25,50,0.88);display:flex;align-items:center;justify-content:center;padding:1.5rem;">
   <div style="background:white;border-radius:12px;width:100%;max-width:400px;padding:2.5rem;box-shadow:0 20px 60px rgba(13,43,82,0.4);">
     <h2 style="font-family:'Syne',sans-serif;font-size:1.3rem;font-weight:700;color:var(--navy);margin-bottom:0.4rem;">Admin Sign In</h2>
     <p style="font-size:13px;color:var(--text-muted);margin-bottom:1.6rem;">REACH Lab · NYU Abu Dhabi</p>
     <div class="form-group">
-      <label>Email</label>
-      <input type="email" id="login-email" placeholder="you@nyu.edu" autocomplete="email" autofocus>
+      <label for="login-email">Email</label>
+      <input type="email" id="login-email" placeholder="you@nyu.edu" autocomplete="email">
     </div>
     <div class="form-group">
-      <label>Password</label>
+      <label for="login-password">Password</label>
       <input type="password" id="login-password" placeholder="••••••••" autocomplete="current-password">
     </div>
     <p id="login-error" style="font-size:13px;color:#cc4444;min-height:1.4em;margin-bottom:0.8rem;"></p>
@@ -137,125 +99,179 @@
 </div>
 
 <nav>
-  <a class="nav-logo" href="index.html">
-    <span class="nav-logo-mark">REACH</span>
-    <span class="nav-logo-sub">Robot Learning<br>&amp; Control Lab</span>
-  </a>
-  <ul class="nav-links">
-    <li><a href="#research">Research</a></li>
-    <li><a href="#team">Team</a></li>
-    <li><a href="#about">About</a></li>
-  </ul>
-  <div id="admin-nav-controls" style="display:none;align-items:center;gap:12px;">
-    <span id="admin-user-email" style="font-size:12px;color:var(--gray-300);"></span>
-    <button class="btn-admin" onclick="openModal()">&#xFF0B; Add Project</button>
-    <button onclick="handleLogout()" style="background:none;border:1px solid rgba(255,255,255,0.2);color:var(--gray-300);font-size:12px;padding:5px 12px;border-radius:4px;cursor:pointer;font-family:inherit;">Logout</button>
+  <div class="nav-logo-mark">REACH<span>Admin</span></div>
+  <div id="admin-nav-controls">
+    <span id="admin-user-email"></span>
+    <button class="btn-logout" onclick="handleLogout()">Logout</button>
   </div>
 </nav>
 
-<section class="hero">
-  <div class="hero-inner">
-    <p class="hero-tag">NYU Abu Dhabi · Division of Engineering · Admin</p>
-    <h1 class="hero-title">Robot <span>Learning</span><br>&amp; Control Lab</h1>
-    <p class="hero-desc">
-      REACH Lab develops algorithms and systems that enable robots to learn, adapt, and collaborate
-      with humans in complex real-world environments.
-    </p>
-    <div class="hero-meta">
-      <div class="hero-meta-item"><strong id="meta-projects">—</strong><span>Active Projects</span></div>
-      <div class="hero-meta-item"><strong>NYU AD</strong><span>Abu Dhabi, UAE</span></div>
-      <div class="hero-meta-item"><strong>2024</strong><span>Founded</span></div>
+<main class="admin-main">
+  <div class="admin-tab-bar">
+    <button id="tab-btn-news" class="tab-btn tab-active" onclick="switchTab('news')">News</button>
+    <button id="tab-btn-research" class="tab-btn" onclick="switchTab('research')">Research</button>
+    <button id="tab-btn-team" class="tab-btn" onclick="switchTab('team')">Team</button>
+    <button id="tab-btn-publications" class="tab-btn" onclick="switchTab('publications')">Publications</button>
+  </div>
+
+  <!-- News tab -->
+  <div id="tab-news" class="tab-panel tab-panel-active">
+    <div class="tab-panel-header">
+      <h2 class="tab-panel-title">News</h2>
+      <button class="btn-admin" onclick="openModal()">&#xFF0B; Add News</button>
     </div>
+    <div id="news-list"></div>
   </div>
-</section>
 
-<section class="section" id="research">
-  <div class="section-inner">
-    <h2 class="section-title">Current Research</h2>
-    <div id="projects-container"></div>
-  </div>
-</section>
-
-<section class="section alt-bg" id="team">
-  <div class="section-inner">
-    <h2 class="section-title">Team</h2>
-    <div class="team-grid">
-      <div class="team-card">
-        <div class="team-avatar">FA</div>
-        <div class="team-name">Prof. Fares Abu-Dakka</div>
-        <div class="team-role">Principal Investigator</div>
-      </div>
-      <div class="team-card">
-        <div class="team-avatar">+</div>
-        <div class="team-name">Join the Lab</div>
-        <div class="team-role">PhD &amp; Postdoc positions open</div>
-      </div>
+  <!-- Research tab -->
+  <div id="tab-research" class="tab-panel">
+    <div class="tab-panel-header">
+      <h2 class="tab-panel-title">Research</h2>
+      <button class="btn-admin" onclick="openModal()">&#xFF0B; Add Project</button>
     </div>
+    <div id="research-list"></div>
   </div>
-</section>
 
-<section class="section" id="about">
-  <div class="section-inner">
-    <h2 class="section-title">About</h2>
-    <div style="max-width:680px; font-size:15.5px; color:var(--text-muted); line-height:1.85;">
-      <p style="margin-bottom:1rem;">
-        The <strong style="color:var(--navy)">REACH Lab</strong> (Robot Learning and Control Lab) is based in the Division of Engineering at NYU Abu Dhabi.
-      </p>
-      <p>
-        Interested in joining? Reach out at <a href="mailto:reach-lab@nyu.edu" style="color:var(--sky);">reach-lab@nyu.edu</a>.
-      </p>
+  <!-- Team tab -->
+  <div id="tab-team" class="tab-panel">
+    <div class="tab-panel-header">
+      <h2 class="tab-panel-title">Team</h2>
+      <button class="btn-admin" onclick="openModal()">&#xFF0B; Add Member</button>
     </div>
+    <div id="team-list"></div>
   </div>
-</section>
 
-<footer>
-  <p>REACH Lab · Robot Learning and Control Lab · NYU Abu Dhabi &nbsp;·&nbsp; 2024–2025</p>
-  <p style="margin-top:6px;"><a href="https://nyuad.nyu.edu/en/research/faculty-labs-and-projects.html">NYU Abu Dhabi Research</a></p>
-</footer>
+  <!-- Publications tab -->
+  <div id="tab-publications" class="tab-panel">
+    <div class="tab-panel-header">
+      <h2 class="tab-panel-title">Publications</h2>
+      <button class="btn-admin" onclick="openModal()">&#xFF0B; Add Publication</button>
+    </div>
+    <div id="publications-list"></div>
+  </div>
+</main>
 
+<!-- Shared modal with 4 form sections -->
 <div class="modal-backdrop" id="modal-backdrop" onclick="handleBackdropClick(event)">
   <div class="modal">
     <div class="modal-header">
-      <h2>Add New Research Project</h2>
+      <h2 id="modal-title">Add Item</h2>
       <button class="modal-close" onclick="closeModal()">&#x2715;</button>
     </div>
-    <div class="form-group">
-      <label>Project Title *</label>
-      <input type="text" id="f-title" placeholder="e.g. Dexterous Manipulation via Imitation Learning">
+
+    <!-- News form -->
+    <div id="modal-form-news">
+      <div class="form-group">
+        <label for="fn-title">Title *</label>
+        <input type="text" id="fn-title" placeholder="e.g. Lab wins Best Paper at ICRA 2025">
+      </div>
+      <div class="form-group">
+        <label for="fn-desc">Description *</label>
+        <textarea id="fn-desc" placeholder="Short description of the news item"></textarea>
+      </div>
+      <div class="form-group">
+        <label for="fn-link">Link (optional)</label>
+        <input type="url" id="fn-link" placeholder="https://...">
+      </div>
+      <div class="modal-actions">
+        <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+        <button class="btn-submit" id="fn-submit" onclick="submitNews()">Add News &#x2192;</button>
+      </div>
     </div>
-    <div class="form-group">
-      <label>Research Area / Tag</label>
-      <input type="text" id="f-tag" placeholder="e.g. Robot Learning · Manipulation">
+
+    <!-- Research form -->
+    <div id="modal-form-research" style="display:none;">
+      <div class="form-group">
+        <label for="f-title">Project Title *</label>
+        <input type="text" id="f-title" placeholder="e.g. Dexterous Manipulation via Imitation Learning">
+      </div>
+      <div class="form-group">
+        <label for="f-tag">Research Area / Tag</label>
+        <input type="text" id="f-tag" placeholder="e.g. Robot Learning · Manipulation">
+      </div>
+      <div class="form-group">
+        <label for="f-desc">Description *</label>
+        <textarea id="f-desc" placeholder="Describe the research problem, approach, and goals..."></textarea>
+      </div>
+      <div class="form-group">
+        <label>Contact Person</label>
+        <input type="text" id="f-contact-name" placeholder="Name">
+        <input type="text" id="f-contact-url" placeholder="Profile URL (optional)" style="margin-top:6px;">
+      </div>
+      <div class="form-group">
+        <label>Video Embed</label>
+        <select id="f-video-type">
+          <option value="youtube">YouTube URL or Embed URL</option>
+          <option value="vimeo">Vimeo URL</option>
+          <option value="direct">Direct MP4 link</option>
+          <option value="none">No video</option>
+        </select>
+        <input type="text" id="f-video-url" placeholder="https://www.youtube.com/watch?v=..." style="margin-top:8px;">
+        <p class="form-hint">Paste any YouTube/Vimeo URL — it will be auto-converted to an embed.</p>
+      </div>
+      <div class="form-group">
+        <label>Publications</label>
+        <div id="pubs-list"></div>
+        <button class="btn-add-pub" onclick="addPubRow()">&#xFF0B; Add Publication</button>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+        <button class="btn-submit" id="fr-submit" onclick="submitProject()">Add Project &#x2192;</button>
+      </div>
     </div>
-    <div class="form-group">
-      <label>Description *</label>
-      <textarea id="f-desc" placeholder="Describe the research problem, approach, and goals..."></textarea>
+
+    <!-- Team form -->
+    <div id="modal-form-team" style="display:none;">
+      <div class="form-group">
+        <label for="ft-name">Name *</label>
+        <input type="text" id="ft-name" placeholder="e.g. Prof. Fares Abu-Dakka">
+      </div>
+      <div class="form-group">
+        <label for="ft-role">Role *</label>
+        <input type="text" id="ft-role" placeholder="e.g. Principal Investigator">
+      </div>
+      <div class="form-group">
+        <label for="ft-photo">Photo URL (optional)</label>
+        <input type="url" id="ft-photo" placeholder="https://...">
+      </div>
+      <div class="form-group">
+        <label for="ft-bio">Bio (optional)</label>
+        <textarea id="ft-bio" placeholder="Short bio text"></textarea>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+        <button class="btn-submit" id="ft-submit" onclick="submitTeamMember()">Add Member &#x2192;</button>
+      </div>
     </div>
-    <div class="form-group">
-      <label>Contact Person</label>
-      <input type="text" id="f-contact-name" placeholder="Name">
-      <input type="text" id="f-contact-url" placeholder="Profile URL (optional)" style="margin-top:6px;">
+
+    <!-- Publications form -->
+    <div id="modal-form-publications" style="display:none;">
+      <div class="form-group">
+        <label for="fp-title">Title *</label>
+        <input type="text" id="fp-title" placeholder="e.g. Robot skill learning via compliance-driven RL">
+      </div>
+      <div class="form-group">
+        <label for="fp-authors">Authors *</label>
+        <input type="text" id="fp-authors" placeholder="e.g. Abu-Dakka et al.">
+      </div>
+      <div class="form-group">
+        <label for="fp-venue">Venue / Journal</label>
+        <input type="text" id="fp-venue" placeholder="e.g. IEEE RA-L">
+      </div>
+      <div class="form-group">
+        <label for="fp-year">Year</label>
+        <input type="number" id="fp-year" placeholder="2024" min="1900" max="2100">
+      </div>
+      <div class="form-group">
+        <label for="fp-link">Link (optional)</label>
+        <input type="url" id="fp-link" placeholder="https://... (PDF or DOI)">
+      </div>
+      <div class="modal-actions">
+        <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+        <button class="btn-submit" id="fp-submit" onclick="submitPublication()">Add Publication &#x2192;</button>
+      </div>
     </div>
-    <div class="form-group">
-      <label>Video Embed</label>
-      <select id="f-video-type">
-        <option value="youtube">YouTube URL or Embed URL</option>
-        <option value="vimeo">Vimeo URL</option>
-        <option value="direct">Direct MP4 link</option>
-        <option value="none">No video</option>
-      </select>
-      <input type="text" id="f-video-url" placeholder="https://www.youtube.com/watch?v=..." style="margin-top:8px;">
-      <p class="form-hint">Paste any YouTube/Vimeo URL — it will be auto-converted to an embed.</p>
-    </div>
-    <div class="form-group">
-      <label>Publications</label>
-      <div id="pubs-list"></div>
-      <button class="btn-add-pub" onclick="addPubRow()">&#xFF0B; Add Publication</button>
-    </div>
-    <div class="modal-actions">
-      <button class="btn-cancel" onclick="closeModal()">Cancel</button>
-      <button class="btn-submit" onclick="submitProject()">Add Project &#x2192;</button>
-    </div>
+
   </div>
 </div>
 
@@ -263,6 +279,7 @@
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
 <script src="js/firebase-config.js"></script>
+<script src="js/utils.js"></script>
 <script src="js/admin.js"></script>
 </body>
 </html>
