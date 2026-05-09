@@ -155,10 +155,12 @@ async function seedDefaultProjects() {
   const batch = db.batch();
   DEFAULT_PROJECTS.forEach(function(p, i) {
     const ref = db.collection('projects').doc(p.id);
-    batch.set(ref, Object.assign({}, p, {
+    const payload = Object.assign({}, p, {
       order: i,
       createdAt: firebase.firestore.FieldValue.serverTimestamp()
-    }));
+    });
+    delete payload.id;
+    batch.set(ref, payload);
   });
   await batch.commit();
 }
@@ -171,11 +173,13 @@ function subscribeToProjects() {
   loading.style.cssText = 'color:var(--gray-500);text-align:center;padding:2rem 0;';
   container.appendChild(loading);
 
-  db.collection('projects')
+  return db.collection('projects')
     .orderBy('order', 'asc')
-    .onSnapshot(async function(snapshot) {
+    .onSnapshot(function(snapshot) {
       if (snapshot.empty) {
-        await seedDefaultProjects();
+        seedDefaultProjects().catch(function(err) {
+          console.error('Seed failed:', err);
+        });
         return;
       }
       currentProjects = snapshot.docs.map(function(d) {
@@ -293,10 +297,13 @@ async function submitProject() {
   };
 
   try {
-    await db.collection('projects').doc(p.id).set(Object.assign({}, p, {
+    const docId = p.id;
+    const payload = Object.assign({}, p, {
       order:     currentProjects.length,
       createdAt: firebase.firestore.FieldValue.serverTimestamp()
-    }));
+    });
+    delete payload.id;
+    await db.collection('projects').doc(docId).set(payload);
     closeModal();
     setTimeout(function() {
       const el = document.getElementById('project-' + p.id);
@@ -350,15 +357,20 @@ async function handleLogout() {
 }
 
 // ── Init ──────────────────────────────────────────────────────────────────────
+var unsubscribeProjects = null;
+
 auth.onAuthStateChanged(function(user) {
   if (user) {
     showAdminControls(user);
+    unsubscribeProjects = subscribeToProjects();
   } else {
     showLoginCard();
+    if (unsubscribeProjects) {
+      unsubscribeProjects();
+      unsubscribeProjects = null;
+    }
   }
 });
-
-subscribeToProjects();
 
 ['login-email', 'login-password'].forEach(function(id) {
   var el = document.getElementById(id);
