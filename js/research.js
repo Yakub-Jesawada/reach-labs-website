@@ -1,6 +1,8 @@
 import { collection, orderBy, query, onSnapshot } from 'firebase/firestore'
 import { db } from './firebase-config.js'
-import { mk, isHttpUrl, videoEmbedUrl } from './utils.js'
+import { mk, isHttpUrl, videoEmbedUrl, initMobileNav } from './utils.js'
+
+initMobileNav()
 
 function buildMediaCol(p) {
   const media = mk('div', 'project-media')
