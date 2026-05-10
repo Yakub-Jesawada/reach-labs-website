@@ -22,6 +22,7 @@ export function videoEmbedUrl(type, url) {
   return null
 }
 
+// Safe to call at module top-level: <script type="module"> is deferred by default.
 export function initMobileNav() {
   const nav = document.querySelector('nav')
   const btn = document.querySelector('.nav-hamburger')
