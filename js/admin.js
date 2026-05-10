@@ -253,9 +253,10 @@ window.submitPublication = async function() {
   const yearVal = document.getElementById('fp-year').value.trim()
   const data = {
     title, authors,
-    venue: document.getElementById('fp-venue').value.trim(),
-    year:  yearVal ? parseInt(yearVal, 10) : null,
-    link:  document.getElementById('fp-link').value.trim(),
+    category: document.getElementById('fp-category').value,
+    venue:    document.getElementById('fp-venue').value.trim(),
+    year:     yearVal ? parseInt(yearVal, 10) : null,
+    link:     document.getElementById('fp-link').value.trim(),
   }
   try {
     if (editingId) {
@@ -310,11 +311,12 @@ function openEditModal(tab, item) {
     document.getElementById('ft-photo').value    = item.photo    || ''
     document.getElementById('ft-bio').value      = item.bio      || ''
   } else if (tab === 'publications') {
-    document.getElementById('fp-title').value   = item.title   || ''
-    document.getElementById('fp-authors').value = item.authors || ''
-    document.getElementById('fp-venue').value   = item.venue   || ''
-    document.getElementById('fp-year').value    = item.year    ? String(item.year) : ''
-    document.getElementById('fp-link').value    = item.link    || ''
+    document.getElementById('fp-title').value    = item.title    || ''
+    document.getElementById('fp-category').value = item.category || 'journal'
+    document.getElementById('fp-authors').value  = item.authors  || ''
+    document.getElementById('fp-venue').value    = item.venue    || ''
+    document.getElementById('fp-year').value     = item.year     ? String(item.year) : ''
+    document.getElementById('fp-link').value     = item.link     || ''
   }
   updateSubmitLabel()
   document.getElementById('modal-backdrop').classList.add('open')
@@ -341,6 +343,7 @@ function clearModalForm(tab) {
     document.getElementById('ft-category').value = 'pi'
   } else if (tab === 'publications') {
     ;['fp-title', 'fp-authors', 'fp-venue', 'fp-year', 'fp-link'].forEach(id => { document.getElementById(id).value = '' })
+    document.getElementById('fp-category').value = 'journal'
   }
 }
 

@@ -40,7 +40,10 @@
   .section-title { font-family: 'Inter', sans-serif; font-size: 1.6rem; font-weight: 700; color: var(--navy); letter-spacing: -0.3px; margin-bottom: 2.5rem; display: flex; align-items: center; gap: 12px; }
   .section-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
 
-  #publications-list { display: flex; flex-direction: column; gap: 1rem; }
+  .pub-section { margin-bottom: 4rem; }
+  .pub-section-title { font-size: 1.5rem; font-weight: 700; color: var(--navy); letter-spacing: -0.2px; margin-bottom: 0.5rem; }
+  .pub-section-rule { height: 2px; background: var(--border); margin-bottom: 1.6rem; }
+  .pub-list { display: flex; flex-direction: column; gap: 0.8rem; }
   .pub-entry { background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 1.4rem 1.8rem; transition: box-shadow 0.25s; }
   .pub-entry:hover { box-shadow: 0 4px 20px rgba(13,43,82,0.08); }
   .pub-entry-title { font-family: 'Inter', sans-serif; font-size: 1rem; font-weight: 700; color: var(--navy); margin-bottom: 0.4rem; }
@@ -85,7 +88,6 @@
 
 <section class="section" id="publications">
   <div class="section-inner">
-    <h2 class="section-title">All Publications</h2>
     <div id="publications-list"></div>
   </div>
 </section>

@@ -2,6 +2,14 @@ import { collection, orderBy, query, onSnapshot } from 'firebase/firestore'
 import { db } from './firebase-config.js'
 import { mk, isHttpUrl } from './utils.js'
 
+const CATEGORIES = [
+  { key: 'book',       label: 'Books' },
+  { key: 'preprint',   label: 'Selected Preprints' },
+  { key: 'journal',    label: 'Journal Papers' },
+  { key: 'conference', label: 'Conferences' },
+  { key: 'chapter',    label: 'Book Chapters' },
+]
+
 function renderPublication(pub) {
   const entry = mk('div', 'pub-entry')
 
@@ -19,18 +27,10 @@ function renderPublication(pub) {
   entry.appendChild(titleDiv)
 
   const meta = mk('p', 'pub-entry-meta')
-  const authors = mk('span')
-  authors.textContent = pub.authors
-  meta.appendChild(authors)
-
+  meta.textContent = pub.authors || ''
   if (pub.venue || pub.year) {
-    meta.append(' · ')
-    const venueYear = mk('span')
-    const parts = []
-    if (pub.venue) parts.push(pub.venue)
-    if (pub.year) parts.push(String(pub.year))
-    venueYear.textContent = parts.join(' ')
-    meta.appendChild(venueYear)
+    const parts = [pub.venue, pub.year ? String(pub.year) : ''].filter(Boolean)
+    meta.textContent += ' · ' + parts.join(' ')
   }
   entry.appendChild(meta)
 
@@ -42,6 +42,7 @@ const q = query(collection(db, 'publications'), orderBy('order', 'asc'))
 
 onSnapshot(q, (snapshot) => {
   container.textContent = ''
+
   if (snapshot.empty) {
     const empty = mk('p')
     empty.textContent = 'No publications yet.'
@@ -49,8 +50,33 @@ onSnapshot(q, (snapshot) => {
     container.appendChild(empty)
     return
   }
+
+  const grouped = {}
   snapshot.docs.forEach(d => {
-    container.appendChild(renderPublication({ id: d.id, ...d.data() }))
+    const pub = { id: d.id, ...d.data() }
+    const cat = pub.category || 'journal'
+    if (!grouped[cat]) grouped[cat] = []
+    grouped[cat].push(pub)
+  })
+
+  CATEGORIES.forEach(({ key, label }) => {
+    const pubs = grouped[key]
+    if (!pubs || pubs.length === 0) return
+
+    const section = mk('div', 'pub-section')
+
+    const heading = mk('h2', 'pub-section-title')
+    heading.textContent = label
+    section.appendChild(heading)
+
+    const rule = mk('div', 'pub-section-rule')
+    section.appendChild(rule)
+
+    const list = mk('div', 'pub-list')
+    pubs.forEach(p => list.appendChild(renderPublication(p)))
+    section.appendChild(list)
+
+    container.appendChild(section)
   })
 }, (err) => {
   console.error('Firestore read error:', err)
