@@ -21,3 +21,19 @@ export function videoEmbedUrl(type, url) {
   if (type === 'direct' && isHttpUrl(url)) return url
   return null
 }
+
+export function initMobileNav() {
+  const nav = document.querySelector('nav')
+  const btn = document.querySelector('.nav-hamburger')
+  if (!btn || !nav) return
+
+  btn.addEventListener('click', () => nav.classList.toggle('nav-open'))
+
+  document.querySelectorAll('.nav-links a').forEach(link => {
+    link.addEventListener('click', () => nav.classList.remove('nav-open'))
+  })
+
+  document.addEventListener('click', e => {
+    if (!nav.contains(e.target)) nav.classList.remove('nav-open')
+  })
+}
