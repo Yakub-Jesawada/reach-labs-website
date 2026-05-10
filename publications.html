@@ -27,13 +27,12 @@
   .nav-links a:hover { color: var(--white); }
   .nav-links a.nav-active { color: var(--sky-light); }
 
-  .hero { background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 60%, #1e4d80 100%); color: white; padding: 90px 3rem 80px; position: relative; overflow: hidden; }
+  .hero { background: linear-gradient(135deg, #0d2b52 0%, #1a3f6f 60%, #1e4d80 100%); color: white; padding: 60px 3rem 55px; position: relative; overflow: hidden; }
   .hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 75% 50%, rgba(43,135,200,0.15) 0%, transparent 65%); pointer-events: none; }
-  .hero-inner { max-width: 900px; margin: 0 auto; position: relative; }
-  .hero-tag { font-size: 11px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--sky-light); margin-bottom: 1.2rem; }
-  h1.hero-title { font-family: 'Inter', sans-serif; font-size: clamp(2.4rem, 5vw, 3.6rem); font-weight: 800; line-height: 1.1; letter-spacing: -1px; color: var(--white); margin-bottom: 1.2rem; }
-  h1.hero-title span { color: var(--sky-light); }
-  .hero-desc { font-size: 17px; font-weight: 300; color: rgba(255,255,255,0.75); max-width: 640px; line-height: 1.75; }
+  .hero-inner { max-width: 700px; margin: 0 auto; position: relative; display: flex; flex-direction: column; align-items: center; text-align: center; }
+  .hero-logo { height: 180px; width: auto; border-radius: 12px; margin-bottom: 1.4rem; }
+  .hero-tag { font-size: 10px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: #3fa3e0; margin-bottom: 0.8rem; }
+  .hero-desc { font-size: 16px; font-weight: 300; color: rgba(255,255,255,0.7); max-width: 520px; line-height: 1.75; }
 
   .section { padding: 80px 3rem; }
   .section-inner { max-width: 960px; margin: 0 auto; }
@@ -61,7 +60,7 @@
 <body>
 
 <nav>
-  <a class="nav-logo" href="index.html"><img src="reach-logo.jpeg" alt="REACH Lab" class="nav-logo-img"></a>
+  <a class="nav-logo" href="index.html"><img src="reach-logo.svg" alt="REACH Lab" class="nav-logo-img"></a>
   <ul class="nav-links">
     <li><a href="index.html">Home</a></li>
     <li><a href="research.html">Research</a></li>
@@ -72,8 +71,8 @@
 
 <section class="hero">
   <div class="hero-inner">
+    <img src="reach-logo.jpeg" alt="REACH Lab" class="hero-logo">
     <p class="hero-tag">NYU Abu Dhabi · Division of Engineering</p>
-    <h1 class="hero-title"><span>Publications</span></h1>
     <p class="hero-desc">
       Peer-reviewed research from the REACH Lab on robot learning, manipulation,
       and human-robot collaboration.
