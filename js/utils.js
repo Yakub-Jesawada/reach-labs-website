@@ -1,25 +1,23 @@
-/* ── REACH Lab — Shared Utilities ────────────────────────────────────────── */
+export const isHttpUrl = u => typeof u === 'string' && /^https?:\/\//i.test(u)
 
-const isHttpUrl = u => typeof u === 'string' && /^https?:\/\//i.test(u);
-
-function mk(tag, className) {
-  const el = document.createElement(tag);
-  if (className) el.className = className;
-  return el;
+export function mk(tag, className) {
+  const el = document.createElement(tag)
+  if (className) el.className = className
+  return el
 }
 
-function videoEmbedUrl(type, url) {
-  if (!url || type === 'none') return null;
+export function videoEmbedUrl(type, url) {
+  if (!url || type === 'none') return null
   if (type === 'youtube') {
-    const m = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([A-Za-z0-9_-]{11})/);
-    if (m) return 'https://www.youtube.com/embed/' + m[1];
-    if (url.includes('youtube.com/embed')) return url;
+    const m = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([A-Za-z0-9_-]{11})/)
+    if (m) return 'https://www.youtube.com/embed/' + m[1]
+    if (url.includes('youtube.com/embed')) return url
   }
   if (type === 'vimeo') {
-    const m = url.match(/vimeo\.com\/(\d+)/);
-    if (m) return 'https://player.vimeo.com/video/' + m[1];
-    if (url.includes('player.vimeo.com')) return url;
+    const m = url.match(/vimeo\.com\/(\d+)/)
+    if (m) return 'https://player.vimeo.com/video/' + m[1]
+    if (url.includes('player.vimeo.com')) return url
   }
-  if (type === 'direct' && isHttpUrl(url)) return url;
-  return null;
+  if (type === 'direct' && isHttpUrl(url)) return url
+  return null
 }

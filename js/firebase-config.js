@@ -1,14 +1,16 @@
-// ── REACH Lab — Firebase Config ──────────────────────────────────────────────
+import { initializeApp } from 'firebase/app'
+import { getFirestore } from 'firebase/firestore'
+import { getAuth } from 'firebase/auth'
+
 const firebaseConfig = {
-  apiKey:            "AIzaSyDiAo7qQ0jH1AqPCgdsDncASYCy9UWROdo",
-  authDomain:        "reach-lab-10429.firebaseapp.com",
-  projectId:         "reach-lab-10429",
-  storageBucket:     "reach-lab-10429.firebasestorage.app",
-  messagingSenderId: "81038102710",
-  appId:             "1:81038102710:web:30303594362513355f9617"
-};
+  apiKey:            import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain:        import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId:         import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket:     import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId:             import.meta.env.VITE_FIREBASE_APP_ID
+}
 
-firebase.initializeApp(firebaseConfig);
-
-const db   = firebase.firestore();
-const auth = typeof firebase.auth === 'function' ? firebase.auth() : null;
+const app = initializeApp(firebaseConfig)
+export const db = getFirestore(app)
+export const auth = getAuth(app)
