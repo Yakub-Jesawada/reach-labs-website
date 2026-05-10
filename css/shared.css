@@ -41,8 +41,8 @@ footer a:hover { text-decoration: underline; }
 
 @media (max-width: 768px) {
   nav { padding: 0 1.2rem; }
-  .nav-links { display: none; flex-direction: column; position: absolute; top: 72px; left: 0; right: 0; background: var(--navy-mid); padding: 0.5rem 0; z-index: 99; }
-  .nav-open .nav-links { display: flex; }
+  .nav-links { overflow: hidden; max-height: 0; opacity: 0; flex-direction: column; position: absolute; top: 72px; left: 0; right: 0; background: var(--navy-mid); padding: 0.5rem 0; z-index: 200; transition: max-height 0.25s ease, opacity 0.2s; }
+  .nav-open .nav-links { max-height: 300px; opacity: 1; }
   .nav-open .nav-links a { padding: 14px 1.5rem; display: block; width: 100%; border-bottom: 1px solid rgba(255,255,255,0.07); }
   .nav-hamburger { display: flex; align-items: center; }
   .hero { padding: 40px 1.2rem; }
@@ -52,6 +52,5 @@ footer a:hover { text-decoration: underline; }
 
 @media (max-width: 480px) {
   .hero-logo { height: 120px; }
-  .hero-desc { font-size: 16px; }
   .section-title { font-size: 1.3rem; }
 }
