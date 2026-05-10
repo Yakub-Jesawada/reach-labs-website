@@ -1,6 +1,8 @@
 import { collection, orderBy, query, onSnapshot } from 'firebase/firestore'
 import { db } from './firebase-config.js'
-import { mk, isHttpUrl } from './utils.js'
+import { mk, isHttpUrl, initMobileNav } from './utils.js'
+
+initMobileNav()
 
 const CATEGORIES = [
   { key: 'book',       label: 'Books' },
