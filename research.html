@@ -27,12 +27,13 @@
   .nav-links a:hover { color: var(--white); }
   .nav-links a.nav-active { color: var(--sky-light); }
 
-  .hero { background: linear-gradient(135deg, #060f1e 0%, #0a1f3d 50%, #0d2b52 100%); color: white; padding: 60px 3rem 55px; position: relative; overflow: hidden; }
-  .hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 75% 50%, rgba(43,135,200,0.15) 0%, transparent 65%); pointer-events: none; }
+  .hero { background: radial-gradient(ellipse at 50% 0%, #1a3f6f 0%, #0d1a2e 45%, #07080d 100%); color: white; padding: 60px 3rem 55px; position: relative; overflow: visible; }
+  .hero::before { content: ''; position: absolute; inset: -40px; background: radial-gradient(ellipse at 50% 20%, rgba(43,135,200,0.18) 0%, transparent 65%); pointer-events: none; }
   .hero-inner { max-width: 700px; margin: 0 auto; position: relative; display: flex; flex-direction: column; align-items: center; text-align: center; }
-  .hero-logo { height: 180px; width: auto; border-radius: 12px; margin-bottom: 1.4rem; box-shadow: 0 16px 56px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.08); }
-  .hero-tag { font-size: 10px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: #3fa3e0; margin-bottom: 0.8rem; }
-  .hero-desc { font-size: 16px; font-weight: 300; color: rgba(255,255,255,0.7); max-width: 520px; line-height: 1.75; margin-bottom: 1.6rem; }
+  .hero-logo-wrap { background: transparent; margin-bottom: 2rem; }
+  .hero-logo { height: 280px; width: auto; display: block; filter: brightness(0) invert(1) drop-shadow(0 0 30px rgba(43,135,200,0.5)); }
+  .hero-tag { font-size: 12px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: #3fa3e0; margin-bottom: 0.8rem; }
+  .hero-desc { font-size: 18px; font-weight: 300; color: rgba(255,255,255,0.7); max-width: 560px; line-height: 1.75; margin-bottom: 1.6rem; }
   .hero-meta { display: flex; gap: 2.5rem; justify-content: center; flex-wrap: wrap; }
   .hero-meta-item { display: flex; flex-direction: column; gap: 2px; align-items: center; }
   .hero-meta-item strong { font-family: 'Inter', sans-serif; font-size: 1.4rem; font-weight: 700; color: #3fa3e0; }
@@ -89,7 +90,9 @@
 
 <section class="hero">
   <div class="hero-inner">
-    <img src="reach-logo.svg" alt="REACH Lab" class="hero-logo">
+    <div class="hero-logo-wrap">
+      <img src="reach-logo.svg" alt="REACH Lab" class="hero-logo">
+    </div>
     <p class="hero-tag">NYU Abu Dhabi · Division of Engineering</p>
     <p class="hero-desc">
       Advancing robotic learning, manipulation, and human-robot collaboration through
