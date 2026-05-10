@@ -6,41 +6,8 @@
 <title>REACH Lab — Robot Learning and Control Lab | NYU Abu Dhabi</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/shared.css">
 <style>
-  :root {
-    --navy: #0d2b52; --navy-mid: #1a3f6f; --navy-light: #2a5fa0;
-    --sky: #2b87c8; --sky-light: #3fa3e0; --sky-pale: #daeef8;
-    --white: #ffffff; --off-white: #f5f8fb;
-    --gray-100: #eaeff5; --gray-300: #b0bece; --gray-500: #6b7f95; --gray-700: #334560;
-    --text: #0f1e32; --text-muted: #4a6080;
-    --border: rgba(42,95,160,0.15); --card-bg: #ffffff; --section-bg: #f5f8fb;
-  }
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; }
-  body { font-family: 'Inter', sans-serif; background: var(--off-white); color: var(--text); line-height: 1.7; font-size: 16px; }
-
-  nav { position: sticky; top: 0; z-index: 100; background: var(--navy); display: flex; align-items: center; justify-content: space-between; padding: 0 3rem; height: 72px; box-shadow: 0 2px 20px rgba(13,43,82,0.3); }
-  .nav-logo { display: flex; align-items: center; text-decoration: none; }
-  .nav-logo-img { height: 56px; width: auto; border-radius: 6px; }
-  .nav-links { display: flex; gap: 2rem; list-style: none; }
-  .nav-links a { color: var(--gray-300); text-decoration: none; font-size: 13.5px; font-weight: 400; letter-spacing: 0.03em; transition: color 0.2s; }
-  .nav-links a:hover { color: var(--white); }
-  .nav-links a.nav-active { color: var(--sky-light); }
-
-  .hero { background: radial-gradient(ellipse at 50% 0%, #1a3f6f 0%, #0d1a2e 45%, #07080d 100%); color: white; padding: 60px 3rem 55px; position: relative; overflow: visible; }
-  .hero::before { content: ''; position: absolute; inset: -40px; background: radial-gradient(ellipse at 50% 20%, rgba(43,135,200,0.18) 0%, transparent 65%); pointer-events: none; }
-  .hero-inner { max-width: 700px; margin: 0 auto; position: relative; display: flex; flex-direction: column; align-items: center; text-align: center; }
-  .hero-logo-wrap { background: transparent; margin-bottom: 2rem; }
-  .hero-logo { height: 280px; width: auto; display: block; filter: brightness(0) invert(1) drop-shadow(0 0 30px rgba(43,135,200,0.5)); }
-  .hero-tag { font-size: 12px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: #3fa3e0; margin-bottom: 0.8rem; }
-  .hero-desc { font-size: 18px; font-weight: 300; color: rgba(255,255,255,0.7); max-width: 560px; line-height: 1.75; }
-
-  .section { padding: 80px 3rem; }
-  .section-inner { max-width: 960px; margin: 0 auto; }
-  .section-title { font-family: 'Inter', sans-serif; font-size: 1.6rem; font-weight: 700; color: var(--navy); letter-spacing: -0.3px; margin-bottom: 2.5rem; display: flex; align-items: center; gap: 12px; }
-  .section-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
-  .alt-bg { background: var(--section-bg); }
-
   #news-container { display: flex; flex-direction: column; gap: 1.5rem; }
   .news-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 10px; padding: 1.8rem 2rem; transition: box-shadow 0.25s; }
   .news-card:hover { box-shadow: 0 6px 32px rgba(13,43,82,0.1); }
@@ -48,15 +15,6 @@
   .news-desc { font-size: 14.5px; color: var(--text-muted); line-height: 1.75; margin-bottom: 0.8rem; }
   .news-link { font-size: 13px; color: var(--sky); text-decoration: none; font-weight: 500; }
   .news-link:hover { text-decoration: underline; }
-
-  @media (max-width: 700px) {
-    nav { padding: 0 1.2rem; }
-    .hero, .section { padding-left: 1.2rem; padding-right: 1.2rem; }
-  }
-
-  footer { background: var(--navy); color: rgba(255,255,255,0.55); text-align: center; padding: 2rem 3rem; font-size: 13px; }
-  footer a { color: var(--sky-light); text-decoration: none; }
-  footer a:hover { text-decoration: underline; }
 </style>
 </head>
 <body>
@@ -69,6 +27,7 @@
     <li><a href="team.html">Team</a></li>
     <li><a href="publications.html">Publications</a></li>
   </ul>
+  <button class="nav-hamburger" aria-label="Toggle menu">&#9776;</button>
 </nav>
 
 <section class="hero">
